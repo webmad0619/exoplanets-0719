@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.7/d3.js"></script>
+    <style>
+        html,
+        body,
+        div,
+        span,
+        applet,
+        object,
+        iframe,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        blockquote,
+        pre,
+        a,
+        abbr,
+        acronym,
+        address,
+        big,
+        cite,
+        code,
+        del,
+        dfn,
+        em,
+        img,
+        ins,
+        kbd,
+        q,
+        s,
+        samp,
+        small,
+        strike,
+        strong,
+        sub,
+        sup,
+        tt,
+        var,
+        b,
+        u,
+        i,
+        center,
+        dl,
+        dt,
+        dd,
+        ol,
+        ul,
+        li,
+        fieldset,
+        form,
+        label,
+        legend,
+        table,
+        caption,
+        tbody,
+        tfoot,
+        thead,
+        tr,
+        th,
+        td,
+        article,
+        aside,
+        canvas,
+        details,
+        embed,
+        figure,
+        figcaption,
+        footer,
+        header,
+        hgroup,
+        menu,
+        nav,
+        output,
+        ruby,
+        section,
+        summary,
+        time,
+        mark,
+        audio,
+        video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline
+        }
+
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        hgroup,
+        menu,
+        nav,
+        section {
+            display: block
+        }
+
+        body {
+            line-height: 1
+        }
+
+        ol,
+        ul {
+            list-style: none
+        }
+
+        blockquote,
+        q {
+            quotes: none
+        }
+
+        blockquote:before,
+        blockquote:after,
+        q:before,
+        q:after {
+            content: '';
+            content: none
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0
+        }
+
+        html,
+        body {
+            overflow: hidden;
+        }
+    </style>
+    <style>
+        .planets-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        .planet {
+            height: 0;
+            width: 0;
+            border-radius: 50%;
+            background-color: red;
+            transition: all 0.5s;
+        }
+    </style>
+    <script src="nph-nstedAPI.js"></script>
+
+</head>
+
+<body>
+    <script>
+        const nPlanetsToExamine = 15
+        const minPlanetSize = 20 / 2
+        const maxPlanetSize = 200 / 2
+
+        let containerDOMEl = document.createElement("section")
+        containerDOMEl.setAttribute("class", "planets-container")
+        document.body.appendChild(containerDOMEl)
+
+        Array(nPlanetsToExamine).fill().map(planetContainer => {
+            let planetDOMEl = document.createElement("div")
+            planetDOMEl.setAttribute("class", "planet")
+            document.querySelector(".planets-container").appendChild(planetDOMEl)
+        })
+
+        planets = planets.splice(0, nPlanetsToExamine)
+
+        planets = planets
+            .filter(planet => planet.pl_radj > 0)
+            .map(planet => {
+                return {
+                    name: planet.pl_name,
+                    size: planet.pl_radj
+                }
+            })
+
+        let smallestPlanetRad = Math.min(...planets.map(planet => planet.size))
+        let biggestPlanetRad = Math.max(...planets.map(planet => planet.size))
+
+        let planetScale = d3.scaleLinear()
+            .domain([smallestPlanetRad, biggestPlanetRad])
+            .range([minPlanetSize, maxPlanetSize]);
+
+        planets.map(planet => {
+            planet.scaleSize = `${planetScale(planet.size)}px`
+        })
+
+        // debugger
+
+        function randomFloat(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function randomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        };
+
+
+
+        setTimeout(() => {
+            document.querySelectorAll(".planet").forEach((planet, idx) => {
+                planet.style.height = planet.style.width = planets[idx].scaleSize
+                planet.setAttribute("title", planets[idx].name)
+            })
+        }, 500)
+
+        // planets.forEach((planet, idx) => {
+        //     planet.style.height = planet.style.width = planet.scaleSize
+        //     planet.setAttribute("title", planet.name)
+        // })
+    </script>
+</body>
+
+</html>
